@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rdase</name>
+  <version>0.0.0</version>
+  <description>Ros Description And Simulation Examples</description>
+
+  <author email="vinicius_schettino@todo.todo">vinicius</author>
+  <maintainer email="vinicius_schettino@todo.todo">vinicius</maintainer>
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>urdf_example1</exec_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

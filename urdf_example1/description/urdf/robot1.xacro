@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<robot name="robot1" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:arg name="gazebo" default="false"/>
+    <xacro:property name="gazebo" value="$(arg gazebo)"/>
+
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/materials.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/base.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/wheel.xacro"/>
+
+    <!--base dimensions (length, width and height) and mass-->
+    <xacro:property name="bl" value="1"/>
+    <xacro:property name="bw" value="0.5"/>
+    <xacro:property name="bh" value="0.3"/>
+    <xacro:property name="bm" value="10"/>
+
+    <!--wheel dimensions (radius and thickness) and mass-->
+    <xacro:property name="wr" value="0.2"/>
+    <xacro:property name="wt" value="0.1"/>
+    <xacro:property name="wm" value="1"/>
+
+    <!--create base-->
+    <xacro:base/>
+
+    <!--create wheels-->
+    <xacro:wheel name="front_right" x="${bl/2-wr}" y="${-(bw+wt)/2}" ya="${pi/2}"/>
+    <xacro:wheel name="back_right" x="${-bl/2+wr}" y="${-(bw+wt)/2}" ya="${pi/2}"/>
+    <xacro:wheel name="back_left" x="${-bl/2+wr}" y="${(bw+wt)/2}" ya="${pi/2}"/>
+    <xacro:wheel name="front_left" x="${bl/2-wr}" y="${(bw+wt)/2}" ya="${pi/2}"/>
+
+    <!--Add Gazebo driving plugin, if requested-->
+    <xacro:if value="${gazebo}">
+        <gazebo>
+            <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+                <updateRate>50.0</updateRate>
+                <robotNamespace>/</robotNamespace>
+                <leftFrontJoint>base_to_front_left_wheel</leftFrontJoint>
+                <rightFrontJoint>base_to_front_right_wheel</rightFrontJoint>
+                <leftRearJoint>base_to_back_left_wheel</leftRearJoint>
+                <rightRearJoint>base_to_back_right_wheel</rightRearJoint>
+                <wheelSeparation>${bw+wt}</wheelSeparation>
+                <wheelDiameter>${2*wr}</wheelDiameter>
+                <robotBaseFrame>base_link</robotBaseFrame>
+                <torque>200</torque>
+                <topicName>cmd_vel</topicName>
+                <broadcastTF>true</broadcastTF>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+
+</robot>

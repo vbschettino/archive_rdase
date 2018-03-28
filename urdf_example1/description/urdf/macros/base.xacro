@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!--params are: base length, width and height-->
+    <xacro:macro name="base" params="bl:=^ bw:=^ bh:=^ bm:=^ gazebo:=^">
+        <link name="base_link">
+            <visual>
+                <geometry>
+                    <box size="${bl} ${bw} ${bh}"/>
+                </geometry>
+                <material name="red"/>
+            </visual>
+            <collision>
+                <geometry>
+                    <box size="${bl} ${bw} ${bh}"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="${bm}"/>
+                <inertia ixx="${bm*(bw**2+bh**2)/12}" ixy="0.0" ixz="0.0" iyy="${bm*(bl**2+bh**2)/12}" iyz="0.0" izz="${bm*(bl**2+bw**2)/12}"/>
+            </inertial>
+        </link>
+
+
+        <!--Add Gazebo references, if requested-->
+        <xacro:if value="${gazebo}">
+            <gazebo reference="base_link">
+                <material>Gazebo/Red</material>
+            </gazebo>
+        </xacro:if>
+
+    </xacro:macro>
+
+</robot>

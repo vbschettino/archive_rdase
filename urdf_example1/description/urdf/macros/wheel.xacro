@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!--wheel params are: (distinctive part of) link name, 3d position, yaw angle, radius, thickness and mass-->
+    <xacro:macro name="wheel" params="name x:=0 y:=0 z:=0 ya:=0 wr:=^ wt:=^ wm:=^ gazebo:=^">
+        <joint name="base_to_${name}_wheel" type="continuous">
+            <parent link="base_link"/>
+            <child link="${name}_wheel"/>
+            <origin xyz="${x} ${y} ${z}" rpy="0 0 ${ya}"/>
+        </joint>
+
+        <link name="${name}_wheel">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+                <geometry>
+                    <cylinder length="${wt}" radius="${wr}"/>
+                </geometry>
+                <material name="black"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+                <geometry>
+                    <cylinder length="${wt}" radius="${wr}"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="${wm}"/>
+                <inertia ixx="${(wm*wr**2)/2}" ixy="0.0" ixz="0.0" iyy="${wm*(3*wr**2+wt**2)/12}" iyz="0.0" izz="${wm*(3*wr**2+wt**2)/12}"/>
+            </inertial>
+        </link>
+
+
+        <!--Add Gazebo references, if requested-->
+        <xacro:if value="${gazebo}">
+            <gazebo reference="${name}_wheel">
+                <mu1>10.0</mu1>
+                <mu2>10.0</mu2>
+                <kp>1000000.0</kp>
+                <kd>1.0</kd>
+                <material>Gazebo/Black</material>
+            </gazebo>
+        </xacro:if>
+
+    </xacro:macro>
+
+</robot>
