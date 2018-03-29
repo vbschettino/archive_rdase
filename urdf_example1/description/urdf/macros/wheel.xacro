@@ -14,9 +14,10 @@
             <visual>
                 <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
                 <geometry>
-                    <cylinder length="${wt}" radius="${wr}"/>
+                    <!--<cylinder length="${wt}" radius="${wr}"/>-->
+                    <mesh filename="package://urdf_example1/description/meshes/monster_wheel.stl" scale="${2*wr} ${2*wr} ${wt}"/>
                 </geometry>
-                <material name="black"/>
+                <material name="gray"/>
             </visual>
             <collision>
                 <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
@@ -38,7 +39,7 @@
                 <mu2>10.0</mu2>
                 <kp>1000000.0</kp>
                 <kd>1.0</kd>
-                <material>Gazebo/Black</material>
+                <material>Gazebo/Grey</material>
             </gazebo>
         </xacro:if>
 

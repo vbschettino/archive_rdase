@@ -7,8 +7,9 @@
             <visual>
                 <geometry>
                     <box size="${bl} ${bw} ${bh}"/>
+                    <!--<mesh filename="package://urdf_example1/description/meshes/fusca.stl" scale="${bl} ${bw} ${bh}"/>-->
                 </geometry>
-                <material name="red"/>
+                <material name="green"/>
             </visual>
             <collision>
                 <geometry>
@@ -25,7 +26,7 @@
         <!--Add Gazebo references, if requested-->
         <xacro:if value="${gazebo}">
             <gazebo reference="base_link">
-                <material>Gazebo/Red</material>
+                <material>Gazebo/Green</material>
             </gazebo>
         </xacro:if>
 
