@@ -1,24 +1,25 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <!--wheel params are: (distinctive part of) link name, 3d position, yaw angle, radius, thickness and mass-->
-    <xacro:macro name="wheel" params="name x:=0 y:=0 z:=0 ya:=0 wr:=^ wt:=^ wm:=^ gazebo:=^">
+    <!--wheel params are: (distinctive part of) link name, 3d position, radius, thickness and mass-->
+    <xacro:macro name="wheel" params="name x:=0 y:=0 z:=0 wr:=^ wt:=^ wm:=^ gazebo:=^">
         <joint name="base_to_${name}_wheel" type="continuous">
             <parent link="base_link"/>
             <child link="${name}_wheel"/>
-            <origin xyz="${x} ${y} ${z}" rpy="0 0 ${ya}"/>
+            <origin xyz="${x} ${y} ${z}"/>
+            <axis xyz="0 1 0"/>
         </joint>
 
         <link name="${name}_wheel">
             <visual>
-                <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+                <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
                 <geometry>
                     <cylinder length="${wt}" radius="${wr}"/>
                 </geometry>
                 <material name="black"/>
             </visual>
             <collision>
-                <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+                <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
                 <geometry>
                     <cylinder length="${wt}" radius="${wr}"/>
                 </geometry>
