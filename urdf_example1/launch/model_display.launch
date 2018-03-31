@@ -2,14 +2,14 @@
 
 <launch>
     <arg name="model" default="$(find urdf_example1)/description/urdf/robot1.xacro"/>
-    <arg name="joint_gui" default="true" />
+    <arg name="joints_gui" default="true" />
     <arg name="rvizconfig" default="$(find urdf_example1)/rviz/model_display.rviz"/>
 
     <!--Load robot description-->
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)"/>
 
     <!--Publish robot state-->
-    <param name="use_gui" value="$(arg joint_gui)"/>
+    <param name="use_gui" value="$(arg joints_gui)"/>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
 

@@ -7,7 +7,7 @@
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/materials.xacro"/>
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/base.xacro"/>
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/wheel.xacro"/>
-    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/driving_plugin.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/gazebo_top_level_plugins.xacro"/>
 
     <!--base dimensions (length, width and height) and mass-->
     <xacro:property name="bl" value="1"/>
@@ -29,8 +29,9 @@
     <xacro:wheel name="back_left" x="${-bl/2+wr}" y="${(bw+wt)/2}"/>
     <xacro:wheel name="front_left" x="${bl/2-wr}" y="${(bw+wt)/2}"/>
 
-    <!--Add Gazebo driving plugin, if requested-->
+    <!--Add gazebo plugins, if requested-->
     <xacro:if value="${gazebo}">
+        <xacro:joints_publisher/>
         <xacro:skid_steer/>
     </xacro:if>
 

@@ -15,11 +15,6 @@
     <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot"/>
 
     <!--Publish robot state-->
-    <!--This is a fake state. It will publish the wheels' frames always in the zero position, instead of according to
-        Gazebo. But is a cheap solution that allows visualization in RVIZ without compromising simulation-->
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-        <param name="rate" value="50" />
-    </node>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
 
     <!--Visualize in RVIZ-->

@@ -1,29 +1,40 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <xacro:macro name="skid_steer" params="bw:=^ wt:=^ wr:=^">
+    <xacro:macro name="joints_publisher">
+        <gazebo>
+            <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+                <robotNamespace>/</robotNamespace>
+                <updateRate>50</updateRate>
+                <jointName>
+                    base_to_front_right_wheel, base_to_back_right_wheel, base_to_back_left_wheel, base_to_front_left_wheel
+                </jointName>
+            </plugin>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="skid_steer" params="bw:=^ wt:=^ wr:=^ tf_broadcast:=true">
         <gazebo>
             <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
-                <updateRate>50.0</updateRate>
                 <robotNamespace>/</robotNamespace>
+                <updateRate>50.0</updateRate>
                 <commandTopic>cmd_vel</commandTopic>
                 <odometryTopic>odom</odometryTopic>
                 <robotBaseFrame>base_link</robotBaseFrame>
                 <odometryFrame>odom</odometryFrame>
-                <broadcastTF>true</broadcastTF>
-                <leftFrontJoint>base_to_front_left_wheel</leftFrontJoint>
+                <broadcastTF>${tf_broadcast}</broadcastTF> <!--only odom to base_link-->
                 <rightFrontJoint>base_to_front_right_wheel</rightFrontJoint>
-                <leftRearJoint>base_to_back_left_wheel</leftRearJoint>
                 <rightRearJoint>base_to_back_right_wheel</rightRearJoint>
+                <leftRearJoint>base_to_back_left_wheel</leftRearJoint>
+                <leftFrontJoint>base_to_front_left_wheel</leftFrontJoint>
                 <wheelSeparation>${bw+wt}</wheelSeparation>
                 <wheelDiameter>${2*wr}</wheelDiameter>
-                <torque>200</torque>
+                <torque>100</torque>
                 <covariance_x>0.0001</covariance_x>
                 <covariance_y>0.0001</covariance_y>
                 <covariance_yaw>0.0001</covariance_yaw>
             </plugin>
         </gazebo>
-
     </xacro:macro>
 
 </robot>

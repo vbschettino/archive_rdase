@@ -32,7 +32,7 @@
         </link>
 
 
-        <!--Add Gazebo references, if requested-->
+        <!--Add gazebo references, if requested-->
         <xacro:if value="${gazebo}">
             <gazebo reference="${name}_wheel">
                 <mu1>10.0</mu1>

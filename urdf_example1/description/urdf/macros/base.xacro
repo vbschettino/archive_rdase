@@ -23,7 +23,7 @@
         </link>
 
 
-        <!--Add Gazebo references, if requested-->
+        <!--Add gazebo references, if requested-->
         <xacro:if value="${gazebo}">
             <gazebo reference="base_link">
                 <material>Gazebo/Green</material>
