@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="robot1" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:arg name="gazebo" default="false"/>
+    <xacro:property name="gazebo" value="$(arg gazebo)"/>
+
+    <xacro:include filename="$(find urdf_example2)/description/urdf/macros/materials.xacro"/>
+    <xacro:include filename="$(find urdf_example2)/description/urdf/macros/base.xacro"/>
+    <xacro:include filename="$(find urdf_example2)/description/urdf/macros/wheel.xacro"/>
+
+    <!--base dimensions (length, width and height) and mass-->
+    <xacro:property name="bl" value="1"/>
+    <xacro:property name="bw" value="0.5"/>
+    <xacro:property name="bh" value="0.3"/>
+    <xacro:property name="bm" value="10"/>
+
+    <!--wheel dimensions (radius and thickness) and mass-->
+    <xacro:property name="wr" value="0.2"/>
+    <xacro:property name="wt" value="0.1"/>
+    <xacro:property name="wm" value="1"/>
+
+    <!--create base-->
+    <xacro:base/>
+
+    <!--create wheels-->
+    <xacro:wheel name="front_right" x="${bl/2-wr}" y="${-(bw+wt)/2}"/>
+    <xacro:wheel name="back_right" x="${-bl/2+wr}" y="${-(bw+wt)/2}"/>
+    <xacro:wheel name="back_left" x="${-bl/2+wr}" y="${(bw+wt)/2}"/>
+    <xacro:wheel name="front_left" x="${bl/2-wr}" y="${(bw+wt)/2}"/>
+
+    <!--Add gazebo plugin, if requested-->
+    <xacro:if value="${gazebo}">
+        <gazebo>
+            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+                <robotNamespace>/</robotNamespace>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+
+</robot>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!--wheel params are: (distinctive part of) link name, 3d position, radius, thickness and mass-->
+    <xacro:macro name="wheel" params="name x:=0 y:=0 z:=0 wr:=^ wt:=^ wm:=^ gazebo:=^">
+        <joint name="base_to_${name}_wheel" type="continuous">
+            <parent link="base_link"/>
+            <child link="${name}_wheel"/>
+            <origin xyz="${x} ${y} ${z}"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <link name="${name}_wheel">
+            <visual>
+                <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                <geometry>
+                    <!--<cylinder length="${wt}" radius="${wr}"/>-->
+                    <mesh filename="package://urdf_example2/description/meshes/monster_wheel.stl" scale="${2*wr} ${2*wr} ${wt}"/>
+                </geometry>
+                <material name="gray"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                <geometry>
+                    <cylinder length="${wt}" radius="${wr}"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="${wm}"/>
+                <inertia ixx="${(wm*wr**2)/2}" ixy="0.0" ixz="0.0" iyy="${wm*(3*wr**2+wt**2)/12}" iyz="0.0" izz="${wm*(3*wr**2+wt**2)/12}"/>
+            </inertial>
+        </link>
+
+
+        <!--Add gazebo references, if requested-->
+        <xacro:if value="${gazebo}">
+            <gazebo reference="${name}_wheel">
+                <mu1>10.0</mu1>
+                <mu2>10.0</mu2>
+                <kp>1000000.0</kp>
+                <kd>1.0</kd>
+                <material>Gazebo/Grey</material>
+            </gazebo>
+
+            <!--Add a transmission for each joint to use gazebo_ros_control plugin-->
+            <transmission name="base_to_${name}_wheel_transmission">
+                <type>transmission_interface/SimpleTransmission</type>
+                <actuator name="base_to_${name}_wheel_motor">
+                    <mechanicalReduction>1</mechanicalReduction>
+                </actuator>
+                <joint name="base_to_${name}_wheel">
+                    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                </joint>
+            </transmission>
+        </xacro:if>
+
+    </xacro:macro>
+
+</robot>

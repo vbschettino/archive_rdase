@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="model" default="$(find urdf_example2)/description/urdf/robot1.xacro"/>
+    <arg name="rvizconfig" default="$(find urdf_example2)/rviz/gazebo_sim.rviz"/>
+    <arg name="world" default="worlds/willowgarage.world"/>
+
+    <!--Load robot description-->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model) gazebo:=true"/>
+
+    <!--Launch gazebo and spawn robot model-->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world)"/>
+    </include>
+    <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot"/>
+
+    <!--Spawn ros_controllers-->
+    <rosparam command="load" file="$(find urdf_example2)/config/joints_publisher.yaml" ns="joints_publisher"/>
+    <rosparam command="load" file="$(find urdf_example2)/config/differential_drive.yaml" ns="differential_drive"/>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" args="joints_publisher differential_drive"/>
+
+    <!--Publish robot state-->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <!--Visualize in RVIZ-->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"/>
+</launch>

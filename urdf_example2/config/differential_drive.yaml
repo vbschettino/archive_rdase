@@ -1,0 +1,38 @@
+type: "diff_drive_controller/DiffDriveController"
+publish_rate: 50
+
+base_fram_id: base_link
+odom_frame_id: odom
+
+#The differential drive controller offers semi support for 4-wheeled vehicles with skid steer driving.
+#It works the same way as in the skid steer plugin for gazebo, the wheel velocities are simply averaged.
+#IMPORTANT: order inside the brackets bellow DO matter, as the controller will attempt to read wheels distance and
+#from the URDF file, and only the first wheels are used for that
+left_wheel: ['base_to_front_left_wheel', 'base_to_back_left_wheel']
+right_wheel: ['base_to_front_right_wheel', 'base_to_back_right_wheel']
+
+#This multiplier shouldn't have to be set for simulation only. But since this is skid steer instead of differential
+#drive, odometry from wheels' encoders gets incorrect values for angular speed. Doubling the wheels separation value (to
+#compensate for speed averaging) makes it better, but isn't the ground truth from gazebo.
+#If odometry is being obtained somewhere else (hector_maping for example), comment wheel_separation_multiplier line
+#bellow and change enable_odom_tf to false.
+#To get ground truth: https://answers.ros.org/question/246440/husky-perfect-localization-gazebo-positioning-system/
+wheel_separation_multiplier: 2.0
+enable_odom_tf: true
+
+pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+
+# Velocity and acceleration limits for the robot
+#linear:
+#  x:
+#    has_velocity_limits    : true
+#    max_velocity           : 2.0   # m/s
+#    has_acceleration_limits: true
+#    max_acceleration       : 2.0   # m/s^2
+#angular:
+#  z:
+#    has_velocity_limits    : true
+#    max_velocity           : 4.0   # rad/s
+#    has_acceleration_limits: true
+#    max_acceleration       : 4.0   # rad/s^2
