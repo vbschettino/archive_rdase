@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="robot1" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="robot2" xmlns:xacro="http://ros.org/wiki/xacro">
 
     <xacro:arg name="gazebo" default="false"/>
     <xacro:property name="gazebo" value="$(arg gazebo)"/>
@@ -7,6 +7,7 @@
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/materials.xacro"/>
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/base.xacro"/>
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/wheel.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/laser_scanners.xacro"/>
     <xacro:include filename="$(find urdf_example1)/description/urdf/macros/gazebo_top_level_plugins.xacro"/>
 
     <!--base dimensions (length, width and height) and mass-->
@@ -28,6 +29,9 @@
     <xacro:wheel name="back_right" x="${-bl/2+wr}" y="${-(bw+wt)/2}"/>
     <xacro:wheel name="back_left" x="${-bl/2+wr}" y="${(bw+wt)/2}"/>
     <xacro:wheel name="front_left" x="${bl/2-wr}" y="${(bw+wt)/2}"/>
+
+    <!--Add laser scanners-->
+    <xacro:hokuyo name="front_scan" xyz="${bl/2} 0 ${bh/2}" rpy="0 0 0"/>
 
     <!--Add top-level gazebo plugins, if requested-->
     <xacro:if value="${gazebo}">

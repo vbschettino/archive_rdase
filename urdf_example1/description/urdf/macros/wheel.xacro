@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <!--wheel params are: (distinctive part of) link name, 3d position, radius, thickness and mass-->
+    <!--wheel params are: (distinctive part of) link name, 3d position, radius, thickness, mass and a gazebo flag-->
     <xacro:macro name="wheel" params="name x:=0 y:=0 z:=0 wr:=^ wt:=^ wm:=^ gazebo:=^">
         <joint name="base_to_${name}_wheel" type="continuous">
             <parent link="base_link"/>
