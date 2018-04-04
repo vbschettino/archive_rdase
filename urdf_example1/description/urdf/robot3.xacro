@@ -32,6 +32,7 @@
 
     <!--Add laser scanners-->
     <xacro:hokuyo name="front_scan" xyz="${bl/2-0.05} 0 ${bh/2+0.05}" rpy="0 0 0"/>
+    <xacro:hokuyo name="back_scan" xyz="${-bl/2+0.05} 0 ${bh/2+0.05}" rpy="0 0 ${pi}"/>
 
     <!--Add top-level gazebo plugins, if requested-->
     <xacro:if value="${gazebo}">
