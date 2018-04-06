@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <!--URG-04LX-UG01-->
+    <!--hokuyo URG-04LX-UG01 laser scanner-->
+    <!--Parameters are: link/frame name, position, orientation and gazebo flag-->
     <xacro:macro name="hokuyo" params="name xyz rpy gazebo:=^">
         <joint name="base_to_${name}" type="fixed">
             <parent link="base_link"/>
@@ -28,14 +29,13 @@
             </inertial>
         </link>
 
-
         <!--Add gazebo references, if requested-->
         <xacro:if value="${gazebo}">
             <gazebo reference="${name}">
                 <sensor name="${name}_sensor" type="gpu_ray">
                     <pose>0 0 0 0 0 0</pose>
                     <update_rate>10</update_rate>
-                    <visualize>true</visualize>
+                    <visualize>false</visualize>
                     <ray>
                         <scan>
                             <horizontal>
@@ -46,13 +46,80 @@
                         </scan>
                         <range>
                             <min>0.02</min>
-                            <max>5.6</max>
+                            <!--should be 5.6, but gazebo exhibits weird behaviour for 5.7 or smaller ???-->
+                            <max>5.8</max>
                             <resolution>0.01</resolution>
                         </range>
                         <noise>
                             <type>gaussian</type>
                             <mean>0.0</mean>
                             <stddev>0.05</stddev>
+                        </noise>
+                    </ray>
+                    <plugin name="${name}_plugin" filename="libgazebo_ros_gpu_laser.so">
+                        <robotNamespace>/</robotNamespace>
+                        <frameName>${name}</frameName>
+                        <topicName>${name}</topicName>
+                    </plugin>
+                </sensor>
+            </gazebo>
+        </xacro:if>
+
+    </xacro:macro>
+
+
+    <!--SICK LMS-200 laser scanner-->
+    <!--Parameters are: link/frame name, position, orientation and gazebo flag-->
+    <xacro:macro name="lms200" params="name xyz rpy gazebo:=^">
+        <joint name="base_to_${name}" type="fixed">
+            <parent link="base_link"/>
+            <child link="${name}"/>
+            <origin xyz="${xyz}" rpy="${rpy}"/>
+        </joint>
+
+        <link name="${name}">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://urdf_example1/description/meshes/lms200.dae"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.156 0.155 0.185"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="1e-5" />
+                <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+            </inertial>
+        </link>
+
+        <!--Add gazebo references, if requested-->
+        <xacro:if value="${gazebo}">
+            <gazebo reference="${name}">
+                <sensor name="${name}_sensor" type="gpu_ray">
+                    <pose>0 0 0 0 0 0</pose>
+                    <update_rate>75</update_rate>
+                    <visualize>false</visualize>
+                    <ray>
+                        <scan>
+                            <horizontal>
+                                <samples>361</samples>
+                                <min_angle>${-pi/2}</min_angle>
+                                <max_angle>${pi/2}</max_angle>
+                            </horizontal>
+                        </scan>
+                        <range>
+                            <min>0.02</min>
+                            <max>10.0</max>
+                            <resolution>0.01</resolution>
+                        </range>
+                        <noise>
+                            <type>gaussian</type>
+                            <mean>0.0</mean>
+                            <stddev>0.015</stddev>
                         </noise>
                     </ray>
                     <plugin name="${name}_plugin" filename="libgazebo_ros_gpu_laser.so">
