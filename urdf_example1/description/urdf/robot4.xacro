@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot name="robot4" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:arg name="gazebo" default="false"/>
+    <xacro:property name="gazebo" value="$(arg gazebo)"/>
+
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/materials.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/base.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/wheel.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/laser_scanners.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/imu.xacro"/>
+    <xacro:include filename="$(find urdf_example1)/description/urdf/macros/gazebo_top_level_plugins.xacro"/>
+
+    <!--base dimensions (length, width and height) and mass-->
+    <xacro:property name="bl" value="1"/>
+    <xacro:property name="bw" value="0.5"/>
+    <xacro:property name="bh" value="0.3"/>
+    <xacro:property name="bm" value="10"/>
+
+    <!--wheel dimensions (radius and thickness) and mass-->
+    <xacro:property name="wr" value="0.2"/>
+    <xacro:property name="wt" value="0.1"/>
+    <xacro:property name="wm" value="1"/>
+
+    <!--Create base-->
+    <xacro:base/>
+
+    <!--Create wheels-->
+    <xacro:wheel name="front_right" x="${bl/2-wr}" y="${-(bw+wt)/2}"/>
+    <xacro:wheel name="back_right" x="${-bl/2+wr}" y="${-(bw+wt)/2}"/>
+    <xacro:wheel name="back_left" x="${-bl/2+wr}" y="${(bw+wt)/2}"/>
+    <xacro:wheel name="front_left" x="${bl/2-wr}" y="${(bw+wt)/2}"/>
+
+    <!--Add laser scanners-->
+    <xacro:hokuyo name="front_left_scan" xyz="${bl/2-0.05} ${bw/2-0.05} ${bh/2+0.06}" rpy="0 0 ${pi/4}"/>
+    <xacro:hokuyo name="front_right_scan" xyz="${bl/2-0.05} ${-bw/2+0.05} ${bh/2+0.06}" rpy="0 0 ${-pi/4}"/>
+    <xacro:sick name="back_scan" xyz="${-bl/2+0.08} 0 ${bh/2+0.08}" rpy="0 0 ${-pi}"/>
+
+    <!--Add IMU-->
+    <xacro:phidgets name="imu" xyz="0 0 ${bh/2+0.01}" rpy="0 0 0"/>
+
+    <!--Add top-level gazebo plugins, if requested-->
+    <xacro:if value="${gazebo}">
+        <xacro:joints_publisher/>
+        <xacro:skid_steer/>
+    </xacro:if>
+
+</robot>
