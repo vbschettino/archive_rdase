@@ -70,7 +70,7 @@
 
     <!--SICK LMS-200 laser scanner-->
     <!--Parameters are: link/frame name, position, orientation and gazebo flag-->
-    <xacro:macro name="lms200" params="name xyz rpy gazebo:=^">
+    <xacro:macro name="sick" params="name xyz rpy gazebo:=^">
         <joint name="base_to_${name}" type="fixed">
             <parent link="base_link"/>
             <child link="${name}"/>
