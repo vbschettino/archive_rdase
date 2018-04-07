@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!--PhidgetSpatial 3/3/3 imu-->
+    <!--Parameters are: link/frame name, position, orientation and gazebo flag-->
+    <xacro:macro name="phidgets" params="name xyz rpy gazebo:=^">
+        <joint name="base_to_${name}" type="fixed">
+            <parent link="base_link"/>
+            <child link="${name}"/>
+            <origin xyz="${xyz}" rpy="${rpy}"/>
+        </joint>
+
+        <link name="${name}">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.05 0.05 0.02"/>
+                </geometry>
+                <material name="black"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.05 0.05 0.02"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="1e-5" />
+                <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+            </inertial>
+        </link>
+
+        <!--Add gazebo references, if requested-->
+        <xacro:if value="${gazebo}">
+            <gazebo reference="${name}">
+                <gravity>true</gravity>
+                <material value="Gazebo/Grey"/>
+                <sensor name="${name}_sensor" type="imu">
+                    <pose>0 0 0 0 0 0</pose>
+                    <plugin name="${name}_plugin" filename="libgazebo_ros_imu_sensor.so">
+                        <robotNamespace>/</robotNamespace>
+                        <frameName>${name}</frameName>
+                        <topicName>${name}</topicName>
+                        <xyzOffset>0 0 0</xyzOffset>
+                        <rpyOffset>0 0 0</rpyOffset>
+                        <updateRateHZ>250</updateRateHZ>
+                        <gaussianNoise>0.003</gaussianNoise>
+                    </plugin>
+                </sensor>
+            </gazebo>
+        </xacro:if>
+
+    </xacro:macro>
+
+</robot>
